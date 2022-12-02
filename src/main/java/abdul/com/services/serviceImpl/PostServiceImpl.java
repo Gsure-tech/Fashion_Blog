@@ -21,7 +21,7 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
     @Override
-    public Post makePost(PostDto postDto) {
+    public Post savePost(PostDto postDto) {
         User loggedInUser = userRepository.findById((long)httpSession.getAttribute("loginUser"))
                 .orElseThrow(()-> new UserExistException("Contact the admin"));
        // User user1 = new User();
@@ -29,6 +29,7 @@ public class PostServiceImpl implements PostService {
        // User user = userRepository.findUsersByUserType(user1.getUserType()).orElseThrow();
         if(loggedInUser.getUserType().equals(UserType.ADMIN)) {
             Post post = new Post();
+
             BeanUtils.copyProperties(postDto, post);
             return postRepository.save(post);
         }

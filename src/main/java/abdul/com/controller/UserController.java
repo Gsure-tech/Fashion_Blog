@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -34,6 +37,18 @@ public class UserController {
     public ResponseEntity<String> logout(){
         userService.logout();
         return new ResponseEntity<>("Logout successful", HttpStatus.OK);
+    }
+
+    @GetMapping("/viewUsers")
+    public ResponseEntity<List<UserResponseDto>> viewUSers(){
+        List<User> user = userService.viewUsers();
+        List<UserResponseDto> userResponseDto = new ArrayList<>();
+        for(User users : user){
+            UserResponseDto userResponseDto1 = new UserResponseDto();
+            BeanUtils.copyProperties(users,userResponseDto1);
+            userResponseDto.add(userResponseDto1);
+        }
+        return new ResponseEntity<>(userResponseDto,HttpStatus.OK);
     }
 
 }
