@@ -3,13 +3,11 @@ package abdul.com.model;
 import abdul.com.enums.Gender;
 import abdul.com.enums.UserType;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity(name="users")

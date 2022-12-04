@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,5 +53,11 @@ public class LikesServiceImpl implements LikesService {
            return likes;
         }
         return likesRepository.save(likes);
+    }
+
+    @Override
+    public List<Likes> viewLikes() {
+            List<Likes> likes = likesRepository.findAll();
+            return likes;
     }
 }

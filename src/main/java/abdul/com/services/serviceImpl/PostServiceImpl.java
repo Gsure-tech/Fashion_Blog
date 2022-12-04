@@ -14,7 +14,10 @@ import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
- @AllArgsConstructor
+
+import java.util.List;
+
+@AllArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
@@ -35,4 +38,11 @@ public class PostServiceImpl implements PostService {
         }
         else throw  new ResourceNotFoundException("Contact the Admin");
     }
+
+    @Override
+    public List<Post> viewAllPost() {
+        List<Post> posts = postRepository.findAll();
+        return posts;
+    }
+
 }

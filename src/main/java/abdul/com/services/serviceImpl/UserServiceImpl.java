@@ -5,7 +5,9 @@ import abdul.com.dto.UserResponseDto;
 import abdul.com.enums.UserType;
 import abdul.com.exceptions.ResourceNotFoundException;
 import abdul.com.exceptions.UserExistException;
+import abdul.com.model.Post;
 import abdul.com.model.User;
+import abdul.com.repositories.PostRepository;
 import abdul.com.repositories.UserRepository;
 import abdul.com.services.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -20,6 +22,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final HttpSession httpSession;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
     @Override
     public User signup(UserDto userDto) {
         User user = new User();
@@ -55,6 +58,8 @@ public class UserServiceImpl implements UserService {
         }
        throw new ResourceNotFoundException("Contact the admin");
     }
+
+
 
     @Override
     public String logout() {

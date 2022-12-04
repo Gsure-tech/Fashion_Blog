@@ -1,5 +1,9 @@
 package abdul.com.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +22,10 @@ public class Comment {
     private Long commentId;
 
     private String comment;
+
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "HH:mm:ss, yyyy-MM-dd")
+    @JsonProperty("Time")
     @CreationTimestamp
     private LocalDateTime commentTime;
 

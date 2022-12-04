@@ -1,9 +1,12 @@
 package abdul.com.controller;
 
+import abdul.com.dto.PostResponseDto;
 import abdul.com.dto.UserDto;
 import abdul.com.dto.UserResponseDto;
+import abdul.com.model.Post;
 import abdul.com.model.User;
 import abdul.com.repositories.UserRepository;
+import abdul.com.services.PostService;
 import abdul.com.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -21,6 +24,7 @@ import java.util.List;
 
 public class UserController {
     private final UserService userService;
+    private final PostService postService;
     @PostMapping("/signup")
     public ResponseEntity<UserResponseDto> signup(@RequestBody UserDto userDto){
         UserResponseDto userResponseDto = new UserResponseDto();
@@ -40,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/viewUsers")
-    public ResponseEntity<List<UserResponseDto>> viewUSers(){
+    public ResponseEntity<List<UserResponseDto>> viewUsers(){
         List<User> user = userService.viewUsers();
         List<UserResponseDto> userResponseDto = new ArrayList<>();
         for(User users : user){
@@ -49,6 +53,17 @@ public class UserController {
             userResponseDto.add(userResponseDto1);
         }
         return new ResponseEntity<>(userResponseDto,HttpStatus.OK);
+    }
+    @GetMapping("/viewPosts")
+    public ResponseEntity<List<PostResponseDto>> viewPosts(){
+        List<Post> post = postService.viewAllPost();
+        List<PostResponseDto> postResponseDto = new ArrayList<>();
+        for(Post posts: post){
+            PostResponseDto postResponseDto1 = new PostResponseDto();
+            BeanUtils.copyProperties(posts,postResponseDto1);
+            postResponseDto.add(postResponseDto1);
+        }
+        return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
     }
 
 }
