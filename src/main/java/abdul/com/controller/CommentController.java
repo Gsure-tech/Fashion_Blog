@@ -28,14 +28,9 @@ public class CommentController {
 
     @GetMapping("/viewcomments")
     public ResponseEntity<List<CommentResponseDto>> viewComments(){
-        List<Comment> comment = commentService.viewComments();
-        List<CommentResponseDto> commentResponseDto = new ArrayList<>();
-        for(Comment comments : comment){
-            CommentResponseDto commentResponseDto1 = new CommentResponseDto();
-            BeanUtils.copyProperties(comments,commentResponseDto1);
-            commentResponseDto.add(commentResponseDto1);
-        }
-        return new ResponseEntity<>(commentResponseDto,HttpStatus.OK);
+        List <CommentResponseDto> commentResponseDtoList = commentService.viewComments();
+        
+        return new ResponseEntity<>(commentResponseDtoList,HttpStatus.OK);
     }
 
 }

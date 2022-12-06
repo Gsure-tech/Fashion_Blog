@@ -1,6 +1,7 @@
 package abdul.com.services.serviceImpl;
 
 import abdul.com.dto.CommentDto;
+import abdul.com.dto.CommentResponseDto;
 import abdul.com.exceptions.ResourceNotFoundException;
 import abdul.com.model.Comment;
 import abdul.com.model.Post;
@@ -14,8 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,8 +42,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> viewComments() {
+    public List<CommentResponseDto> viewComments() {
         List <Comment> comments = commentRepository.findAll();
-        return comments;
+        List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+        for(Comment comment : comments){
+            CommentResponseDto commentResponseDto = new CommentResponseDto();
+            BeanUtils.copyProperties(comment,commentResponseDto);
+            //User user = comment.getUser();
+            commentResponseDto.setCommentBy(comment.getUser().getFirstName());
+            commentResponseDtoList.add(commentResponseDto);
+        }
+        return commentResponseDtoList;
     }
 }

@@ -1,7 +1,7 @@
 package abdul.com.services.serviceImpl;
 
 import abdul.com.dto.PostDto;
-import abdul.com.dto.UserDto;
+import abdul.com.dto.PostResponseDto;
 import abdul.com.enums.UserType;
 import abdul.com.exceptions.ResourceNotFoundException;
 import abdul.com.exceptions.UserExistException;
@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -28,7 +29,7 @@ public class PostServiceImpl implements PostService {
         User loggedInUser = userRepository.findById((long)httpSession.getAttribute("loginUser"))
                 .orElseThrow(()-> new UserExistException("Contact the admin"));
        // User user1 = new User();
-        System.out.println(loggedInUser);
+       // System.out.println(loggedInUser);
        // User user = userRepository.findUsersByUserType(user1.getUserType()).orElseThrow();
         if(loggedInUser.getUserType().equals(UserType.ADMIN)) {
             Post post = new Post();
@@ -40,9 +41,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> viewAllPost() {
+    public List<PostResponseDto> viewAllPost() {
         List<Post> posts = postRepository.findAll();
-        return posts;
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+        for(Post post: posts){
+            PostResponseDto postResponseDto = new PostResponseDto();
+            BeanUtils.copyProperties(post,postResponseDto);
+            postResponseDtoList.add(postResponseDto);
+        }
+        return postResponseDtoList;
     }
-
 }

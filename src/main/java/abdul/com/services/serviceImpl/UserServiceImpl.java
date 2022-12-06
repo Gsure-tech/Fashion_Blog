@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,7 +47,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> viewUsers() {
+    public List<UserResponseDto> viewUsers() {
         User loggedInUser = userRepository.findById((long)httpSession.getAttribute("loginUser"))
                 .orElseThrow(()-> new UserExistException("Contact the admin"));
         // User user1 = new User();
@@ -54,12 +55,24 @@ public class UserServiceImpl implements UserService {
         // User user = userRepository.findUsersByUserType(user1.getUserType()).orElseThrow();
         if(loggedInUser.getUserType().equals(UserType.ADMIN)) {
            List <User> users = userRepository.findAll();
-           return users;
+           List <UserResponseDto> userResponseDtoList = new ArrayList<>();
+           for(User user: users){
+               UserResponseDto userResponseDto = new UserResponseDto();
+               BeanUtils.copyProperties(user,userResponseDto);
+               userResponseDtoList.add(userResponseDto);
+           }
+           return userResponseDtoList;
         }
        throw new ResourceNotFoundException("Contact the admin");
     }
 
 
+//    List<User> user = userService.viewUsers();
+//    List<UserResponseDto> userResponseDto = new ArrayList<>();
+//        for(User users : user){
+//        UserResponseDto userResponseDto1 = new UserResponseDto();
+//        BeanUtils.copyProperties(users,userResponseDto1);
+//        userResponseDto.add(userResponseDto1);
 
     @Override
     public String logout() {

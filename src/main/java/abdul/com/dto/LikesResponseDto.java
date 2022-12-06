@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class LikesResponseDto {
-    private Long likeId;
-    private User user;
     private Post post;
+    private String likedBy;
+
 }

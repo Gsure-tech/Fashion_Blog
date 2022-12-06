@@ -45,25 +45,10 @@ public class UserController {
 
     @GetMapping("/viewUsers")
     public ResponseEntity<List<UserResponseDto>> viewUsers(){
-        List<User> user = userService.viewUsers();
-        List<UserResponseDto> userResponseDto = new ArrayList<>();
-        for(User users : user){
-            UserResponseDto userResponseDto1 = new UserResponseDto();
-            BeanUtils.copyProperties(users,userResponseDto1);
-            userResponseDto.add(userResponseDto1);
-        }
+        List<UserResponseDto> userResponseDto = userService.viewUsers();
         return new ResponseEntity<>(userResponseDto,HttpStatus.OK);
     }
-    @GetMapping("/viewPosts")
-    public ResponseEntity<List<PostResponseDto>> viewPosts(){
-        List<Post> post = postService.viewAllPost();
-        List<PostResponseDto> postResponseDto = new ArrayList<>();
-        for(Post posts: post){
-            PostResponseDto postResponseDto1 = new PostResponseDto();
-            BeanUtils.copyProperties(posts,postResponseDto1);
-            postResponseDto.add(postResponseDto1);
-        }
-        return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
-    }
+
+
 
 }

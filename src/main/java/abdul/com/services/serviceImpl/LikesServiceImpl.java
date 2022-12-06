@@ -1,6 +1,8 @@
 package abdul.com.services.serviceImpl;
 
+import abdul.com.dto.CommentResponseDto;
 import abdul.com.dto.LikesDto;
+import abdul.com.dto.LikesResponseDto;
 import abdul.com.exceptions.ResourceNotFoundException;
 import abdul.com.model.Comment;
 import abdul.com.model.Likes;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,18 +38,12 @@ public class LikesServiceImpl implements LikesService {
                 .orElseThrow(()-> new ResourceNotFoundException("User not found"));
         Post post = postRepository.findById(likesDto.getPostId())
                 .orElseThrow(()-> new ResourceNotFoundException("Post doesnt exist"));
-//        Comment comment = commentRepository.findById(likesDto.getCommentId())
-//                .orElseThrow(()-> new ResourceNotFoundException("Comment doesn't exist"));
-       // System.out.println(post);
+
         Likes likes = new Likes();
         //BeanUtils.copyProperties(likesDto,likes);
         likes.setUser(user);
         likes.setPost(post);
-//        likes.setComment(comment);
-        //likes.setMyLike(likesDto.getMyLike());
-       // if(likes.isMyLike()){
-        //likes.setLikeCount(likesDto.getLikeCount()+1);
-      //  }
+
         Optional<Likes> checkLike = likesRepository.findByPostAndUser(post,user);
         if(checkLike.isPresent()){
            likesRepository.delete(checkLike.get());
@@ -56,8 +53,15 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
-    public List<Likes> viewLikes() {
+    public List<LikesResponseDto> viewLikes() {
             List<Likes> likes = likesRepository.findAll();
-            return likes;
+            List <LikesResponseDto> likesResponseDtoList = new ArrayList<>();
+            for(Likes alike:likes){
+                LikesResponseDto likesResponseDto = new LikesResponseDto();
+                BeanUtils.copyProperties(alike,likesResponseDto);
+                likesResponseDto.setLikedBy(alike.getUser().getFirstName());
+                likesResponseDtoList.add(likesResponseDto);
+            }
+            return likesResponseDtoList;
     }
 }
